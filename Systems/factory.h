@@ -19,6 +19,9 @@ namespace SDL_Testing {
 
 			//entity to store the Window and Renderer in
 			int entityWindow;
+			//entity to store the sprite in
+			int entitySprite;
+			//entity to link to the Utility entity
 			int entityUtility;
 	};
 }

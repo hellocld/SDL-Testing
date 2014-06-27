@@ -47,7 +47,7 @@ void SDL_Testing::Factory::init() {
 	
 	//if creating the window and renderer was successfull, it's time to
 	//create the sprite entity and load it's texture
-	int entitiySprite = library->createEntity();
+	entitiySprite = library->createEntity();
 	library->addComponent(entitySprite, new SDL_Testing::Position());
 	library->addComponent(entitySprite, new SDL_Testing::Texture());
 	//set the position x & y to 0, 0
@@ -79,6 +79,11 @@ void SDL_Testing::Factory::update() {
 
 void SDL_Testing::Factory::shutdown() {
 	//destroy the sprite
+	SDL_DestroyTexture(library->getComponent<SDL_Testing::Texture>(entitySprite)->sdlTex);
+	library->destroyEntity(entitySprite);
 	//destroy the renderer
+	SDL_DestroyRenderer(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer);
 	//destroy the window
+	SDL_DestroyWindow(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlWindow);
+	library->destroyEntity(entityWindow);
 }
