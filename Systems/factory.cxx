@@ -32,7 +32,7 @@ void SDL_Testing::Factory::init() {
 		//creating the window failed, so report the error, set
 		//ProgramStatus to "ABORT", and return from init()
 		std::cerr<<"SDL_CreateWindow() ERROR: "<<SDL_GetError()<<std::endl;
-		library->getComponent<SDL_Testing::Utility>(entityUtility)->programStatus = "ABORT";
+		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 		return;
 	}
 	library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer = SDL_CreateRenderer(library->getComponent<SDL_Testing::Window(entityWindow)->sdlWindow, -1, 0);
@@ -41,7 +41,7 @@ void SDL_Testing::Factory::init() {
 		//creating the window failed, so report the error, set
 		//ProgramStatus to "ABORT", and return from init()
 		std::cerr<<"SDL_CreateRenderer() ERROR: "<<SDL_GetError()<<std::endl;
-		library->getComponent<SDL_Testing::Utility>(entityUtility)->programStatus = "ABORT";
+		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 		return;
 	}
 	
@@ -58,7 +58,7 @@ void SDL_Testing::Factory::init() {
 	if(tempSurf == NULL) {
 		//couldn't load the bitmap, so report it and return from init()
 		std::cerr<<"SDL_LoadBMP() ERROR: "<<SDL_GetError()<<std::endl;
-		library->getComponent<SDL_Testing::Utility>(entityUtility)->programStatus = "ABORT";
+		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 		return;
 	}
 	//use tempSurf to create the texture for entitySprite
@@ -66,7 +66,7 @@ void SDL_Testing::Factory::init() {
 	if(library->getComponent<SDL_Testing::Texture(entitySprite)->sdlTex == 0) {
 		//something went wrong, so report it and return from init()
 		std::cerr<<"SDL_CreateTextureFromSurface() ERROR: "<<SDL_GetError()<<std::endl;
-		library->getComponent<SDL_Testing::Utility>(entityUtility)->programStatus = "ABORT";
+		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 		return;
 	}
 
