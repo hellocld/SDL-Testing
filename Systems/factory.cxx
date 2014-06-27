@@ -73,4 +73,12 @@ void SDL_Testing::Factory::init() {
 	//and that should be it!
 }
 
+void SDL_Testing::Factory::update() {
+	//don't do anything
+}
 
+void SDL_Testing::Factory::shutdown() {
+	//destroy the sprite
+	//destroy the renderer
+	//destroy the window
+}
