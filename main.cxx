@@ -42,6 +42,8 @@ int main (int argc, char[] argv) {
 
 	//all done with updating, so shutdown
 	sdltest.systemsShutdown();
-
+	
+	//shutdown SDL since we're all done
+	SDL_Quit();
 	return 0;
 }
