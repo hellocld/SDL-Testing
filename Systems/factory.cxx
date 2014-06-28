@@ -8,9 +8,11 @@
 //
 
 #include "factory.h"
+
 //-----------------------------------------------------------------------------
 // Initiation
 //-----------------------------------------------------------------------------
+
 void SDL_Testing::Factory::init() {
 	//find our utility entity created by the World; we'll need it in case an
 	//error occurs or user input is recieved
@@ -73,9 +75,18 @@ void SDL_Testing::Factory::init() {
 	//and that should be it!
 }
 
+//-----------------------------------------------------------------------------
+// Update
+//-----------------------------------------------------------------------------
+
 void SDL_Testing::Factory::update() {
 	//don't do anything
 }
+
+//-----------------------------------------------------------------------------
+// Shutdown
+//-----------------------------------------------------------------------------
+
 
 void SDL_Testing::Factory::shutdown() {
 	//destroy the sprite
