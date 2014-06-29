@@ -11,12 +11,11 @@
 #include "Systems/render.h"
 #include <SDL2/SDL.h>
 
-int main (int argc, char[] argv) {
+int main (int argc, char* argv[]) {
 	//initialize SDL2
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		//SDL_Init failed, so spit out an error to the terminal and set
-		//the ProgramStatus component in the programUtility entity to
-		//"ABORT"
+		//SDL_Init failed, so spit out an error to the terminal  and
+		//quit
 		std::cerr<<"SDL_Init ERROR: "<<SDL_GetError()<<std::endl;
 		return 1;
 	}
@@ -26,7 +25,8 @@ int main (int argc, char[] argv) {
 
 	//create a Utility entity
 	int entityUtility = sdltest.createEntity();
-	sdltest.addComponent(sdltest, new SDL_Testing::Utility());
+	sdltest.addComponent(entityUtility, new SDL_Testing::Utility());
+	sdltest.getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::UPDATE;
 
 	//add the factory and render systems
 	sdltest.addSystem(new SDL_Testing::Factory());
@@ -36,10 +36,12 @@ int main (int argc, char[] argv) {
 	sdltest.systemsInit();
 
 	//if nothing is wrong, update the systems
-	while(sdltest.getComponent<SDL_Testing::Utility>(entityUtility)->programState != SDL_Testing::Utility::ABORT) {
+	while(sdltest.getComponent<SDL_Testing::Utility>(entityUtility)->programState != SDL_Testing::Utility::ABORT){
+		if(sdltest.getComponent<SDL_Testing::Utility>(entityUtility)->programState == SDL_Testing::Utility::UPDATE)
+			std::cerr<<"-programState == UPDATE\n";
 		sdltest.systemsUpdate();
 	}
-
+	std::cerr<<"-programState == ABORT\n";
 	//all done with updating, so shutdown
 	sdltest.systemsShutdown();
 	
