@@ -8,6 +8,14 @@
 //
 
 #include "factory.h"
+#include "../Components/utility.h"
+#include "../Components/window.h"
+#include "../Components/position.h"
+#include "../Components/texture.h"
+
+#include <SDL2/SDL.h>
+#include <vector>
+#include <iostream>
 
 //-----------------------------------------------------------------------------
 // Initiation
@@ -16,9 +24,9 @@
 void SDL_Testing::Factory::init() {
 	//find our utility entity created by the World; we'll need it in case an
 	//error occurs or user input is recieved
-	for(std::vector<int>::iterator i = library->allEntityIDs().begin; i < library->allEntityIDs().end; ++i) {
-		if(library->hasComponent<SDL_Testing::Utility>(i))
-			entityUtility = i;
+	for(std::vector<int>::iterator i = library->allEntityIDs().begin(); i < library->allEntityIDs().end(); ++i) {
+		if(library->hasComponent<SDL_Testing::Utility>(*i))
+			entityUtility = *i;
 	};
 	
 	//create an entity to store the Window and Renderer in
@@ -37,7 +45,7 @@ void SDL_Testing::Factory::init() {
 		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 		return;
 	}
-	library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer = SDL_CreateRenderer(library->getComponent<SDL_Testing::Window(entityWindow)->sdlWindow, -1, 0);
+	library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer = SDL_CreateRenderer(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlWindow, -1, 0);
 	//check to make sure this worked
 	if(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer == NULL) {
 		//creating the window failed, so report the error, set
@@ -49,7 +57,7 @@ void SDL_Testing::Factory::init() {
 	
 	//if creating the window and renderer was successfull, it's time to
 	//create the sprite entity and load it's texture
-	entitiySprite = library->createEntity();
+	entitySprite = library->createEntity();
 	library->addComponent(entitySprite, new SDL_Testing::Position());
 	library->addComponent(entitySprite, new SDL_Testing::Texture());
 	//set the position x & y to 0, 0
@@ -65,7 +73,7 @@ void SDL_Testing::Factory::init() {
 	}
 	//use tempSurf to create the texture for entitySprite
 	library->getComponent<SDL_Testing::Texture>(entitySprite)->sdlTex = SDL_CreateTextureFromSurface(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, tempSurf);
-	if(library->getComponent<SDL_Testing::Texture(entitySprite)->sdlTex == 0) {
+	if(library->getComponent<SDL_Testing::Texture>(entitySprite)->sdlTex == 0) {
 		//something went wrong, so report it and return from init()
 		std::cerr<<"SDL_CreateTextureFromSurface() ERROR: "<<SDL_GetError()<<std::endl;
 		library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
