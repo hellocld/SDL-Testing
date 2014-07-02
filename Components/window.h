@@ -7,6 +7,9 @@
 // 			fine.
 //
 
+#ifndef WINDOW_H
+#define WINDOW_H
+
 #include "../CLD-ECS/component.h"
 #include <SDL2/SDL.h>
 
@@ -17,3 +20,5 @@ namespace SDL_Testing {
 		       	SDL_Renderer* sdlRenderer = nullptr;
 	};
 }
+
+#endif

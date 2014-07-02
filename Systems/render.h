@@ -5,6 +5,8 @@
 // Description:		The Render system simply finds any renderable objects
 // 			copies them to the screen
 //
+#ifndef RENDER_H
+#define RENDER_H
 
 #include "../CLD-ECS/system.h"
 #include <vector>
@@ -24,3 +26,5 @@ namespace SDL_Testing {
 			int entityUtility;
 	};
 }
+
+#endif

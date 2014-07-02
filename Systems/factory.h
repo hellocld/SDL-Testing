@@ -7,6 +7,9 @@
 // 			and in the end closing everything down appropriately.
 //
 
+#ifndef FACTORY_H
+#define FACTORY_H
+
 #include "../CLD-ECS/system.h"
 #include <SDL2/SDL.h>
 
@@ -25,3 +28,5 @@ namespace SDL_Testing {
 			int entityUtility;
 	};
 }
+
+#endif

@@ -6,6 +6,9 @@
 // 			control the main loop
 //
 
+#ifndef UTILITY_H
+#define UTILITY_H
+
 #include "../CLD-ECS/component.h"
 
 namespace SDL_Testing {
@@ -17,3 +20,5 @@ namespace SDL_Testing {
 			states programState;
 	};
 }
+
+#endif
