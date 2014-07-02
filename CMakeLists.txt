@@ -7,7 +7,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/CLD-ECS"
 add_subdirectory (CLD-ECS)
 add_subdirectory (Systems)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
 
 add_executable (SDL-Testing main.cxx)
-target_link_libraries(SDL-Testing library world system factory render SDL2)
+target_link_libraries(SDL-Testing library world system factory input render SDL2)
