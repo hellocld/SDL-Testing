@@ -80,7 +80,9 @@ void SDL_Testing::Factory::init() {
 		return;
 	}
 
-	//and that should be it!
+	//free tempSurface, as we're no longer using it
+	SDL_FreeSurface(tempSurf);
+
 }
 
 //-----------------------------------------------------------------------------
