@@ -65,7 +65,13 @@ void SDL_Testing::PhysicsEngine::update() {
 						if(collisionTime < 1) {
 							//move the box to the
 							//point of collision
-							
+							CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * collisionTime);
+							//check the collision normals and alter the ball's velocity accordingly
+							if(normal.x == 0) normal.x = 1;
+							if(normal.y == 0) normal.y = 1;
+							library->getComponent<SDL_Testing::Physics>(*i)->velocity *= normal;
+							//complete the movement with the new velocity
+							CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * (1 - collisionTime));
 						}
 					}
 				}
