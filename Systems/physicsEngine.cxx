@@ -48,6 +48,10 @@ void SDL_Testing::PhysicsEngine::update() {
 		//check the physics type
 		switch (library->getComponent<SDL_Testing::Physics>(*i)->type) {
 			case BALL:
+				//create a reference to the ball Box and Physics components
+				//this should DRASTICALLY reduce the number of calls to library functions searching for Components
+				SDL_Testing::Box* ballBox = &(library->getComponent<SDL_Testing::Box>(*i));
+				SDL_Testing::Physics* ballPhysics = &(library->getComponent<SDL_Testing::Physics>(*i));
 				//create a "counter" for movement occuring during this frame
 				float moveTime = 1;
 				//collect all WALL objects
@@ -68,8 +72,8 @@ void SDL_Testing::PhysicsEngine::update() {
 					//loop through the walls
 					for(std::vector<int>::iterator walls = wall::begin(); walls < wall::end(); ++walls) {
 						//check for a collision; if one occurs in a shorter timespan than collisionTime currently stores, store the new time and the wall's ID
-						float checkTime = CLD_Util::Collision_AABB::aabbSweepCheck(library->getComponent<SDL_Testing::Box>(*i)->box,
-								library->getComponent<SDL_Testing::Physics>(*i)->velocity * moveTime,
+						float checkTime = CLD_Util::Collision_AABB::aabbSweepCheck(ballBox->box,
+								ballPhysics->velocity * moveTime,
 								library->getComponent<SDL_Testing::Box>(*walls)->box,
 								normals);
 						if(checkTime < collisionTime) {
@@ -79,18 +83,18 @@ void SDL_Testing::PhysicsEngine::update() {
 					}
 					//if collisionTime == 1 (no collision), move the ball the remainder of moveTime
 					if(collisionTime == 1) {
-						CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * moveTime);
+						CLD_Util::Tools::boxMove(ballBox->box, ballPhysics->velocity * moveTime);
 						//set moveTime to 0, so the loop ends
 						moveTime = 0;
 					} else {
 						//now that we have the nearest collision and collisionTime, we move the ball to the collisionTime, adjust the velocity based on the collision, and subtract collisionTime from moveTime
-						CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * collisionTime);
+						CLD_Util::Tools::boxMove(ballBox->box, ballPhysics->velocity * collisionTime);
 						moveTime -= collisionTime;
 						//adjust the velocity based on the collision normal
-						if((normal.x > 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.x < 0)||(normal.x < 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.x > 0))
-							library.getComponent<SDL_Testing::Physics>(*i)->velocity.x *= -1;
-						if((normal.y > 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.y < 0)||(normal.y < 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.y > 0))
-							library.getComponent<SDL_Testing::Physics>(*i)->velocity.y *= -1;
+						if((normal.x > 0 && ballPhysics->velocity.x < 0)||(normal.x < 0 && ballPhysics->velocity.x > 0))
+							ballPhysics->velocity.x *= -1;
+						if((normal.y > 0 && ballPhysics->velocity.y < 0)||(normal.y < 0 && ballPhysics->velocity.y > 0))
+							ballPhysics->velocity.y *= -1;
 
 					}
 
