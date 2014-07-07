@@ -48,34 +48,49 @@ void SDL_Testing::PhysicsEngine::update() {
 		//check the physics type
 		switch (library->getComponent<SDL_Testing::Physics>(*i)->type) {
 			case BALL:
-				//if it's the ball, we need to check it's
-				//movement for collisions with WALLs
-				for(std::vector<int>::iterator w = entitiesPhysics::begin(); i < entitiesPhysics.end(); ++w) {
-					//make a vector for registering
-					//collision normals
-					CLD_Util::Objects::vec2d normal;
-
-					//check if w is a WALL type
-					if(library->getComponent<SDL_Testing::Physics>(*w)->type == WALL) {
-						float collisionTime = aabbSweepCheck(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity,
-									library->getComponent<SDL_Testing::Box>(*w)->box, normal);
-
-						//if collisionTime is less than
-						//1, a collision occured
-						if(collisionTime < 1) {
-							//move the box to the
-							//point of collision
-							CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * collisionTime);
-							//check the collision normals and alter the ball's velocity accordingly
-							if(normal.x == 0) normal.x = 1;
-							if(normal.y == 0) normal.y = 1;
-							library->getComponent<SDL_Testing::Physics>(*i)->velocity *= normal;
-							//complete the movement with the new velocity
-							CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * (1 - collisionTime));
+				//create a "counter" for movement occuring during this frame
+				float moveTime = 1;
+				//collect all WALL objects
+				std::vector<int> walls;
+				for(std::vector<int>::iterator w = entitiesPhysics::begin(); w < entitiesPhysics.end(); ++w) {
+					if(library->getComponent<SDL_Testing::Physics>(*w)->type == WALL)
+						walls.push_back(*w);
+				}
+				//start a loop that checks for collisions so long as moveTime != 0
+				while(moveTime > 0) {
+					//iterate through each of the walls, checking for a collision between it and the BALL
+					//store the ID of the WALL
+					int nearestCollidingWall = wall[0];
+					//store the time of collision (start at 1, which is no collision)
+					float collisionTime = 1;
+					//store the normals of the potential collision
+					CLD_Util::Objects::vec2d normals;
+					//loop through the walls
+					for(std::vector<int>::iterator walls = wall::begin(); walls < wall::end(); ++walls) {
+						//check for a collision; if one occurs in a shorter timespan than collisionTime currently stores, store the new time and the wall's ID
+						float checkTime = CLD_Util::Collision_AABB::aabbSweepCheck(library->getComponent<SDL_Testing::Box>(*i)->box,
+								library->getComponent<SDL_Testing::Physics>(*i)->velocity * moveTime,
+								library->getComponent<SDL_Testing::Box>(*walls)->box,
+								normals);
+						if(checkTime < collisionTime) {
+							collisionTime = checkTime;
+							nearestCollidingWall = (*walls);
 						}
 					}
+					//if collisionTime == 1 (no collision), move the ball the remainder of moveTime
+					if(collisionTime == 1) {
+						CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * moveTime);
+						//set moveTime to 0, so the loop ends
+						moveTime = 0;
+					} else {
+						//now that we have the nearest collision and collisionTime, we move the ball to the collisionTime, adjust the velocity based on the collision, and subtract collisionTime from moveTime
+						CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * collisionTime);
+						moveTime -= collisionTime;
+					}
+
+					//this will repeat over and over until all collisions have been accounted for
 				}
-				break;
+			break;
 			case PARTICLE:
 				//just move it, since particles don't react to
 				//physics stuff in this demo
