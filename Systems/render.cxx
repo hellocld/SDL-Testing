@@ -64,7 +64,7 @@ void SDL_Testing::Render::update() {
 	//iterate through all renderable entities
 	for(std::vector<int>::iterator i = entitiesRender.begin(); i < entitiesRender.end(); ++i) {
 		//copy the texture to the renderer
-		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, CLD_Util::Tools::boxToSDLRECT(library->getComponent<SDL_Testing::Box>(*i)->box) != 0) {
+		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, CLD_Util::Tools::boxToSDLRECT(library->getComponent<SDL_Testing::Box>(*i)->box) != 0)) {
 			//something went wrong, ABORT
 			std::cerr<<"SDL_RenderCopy() ERROR: "<<SDL_GetError()<<std::endl;
 			library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
