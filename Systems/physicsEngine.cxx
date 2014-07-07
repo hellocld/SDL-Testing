@@ -86,6 +86,12 @@ void SDL_Testing::PhysicsEngine::update() {
 						//now that we have the nearest collision and collisionTime, we move the ball to the collisionTime, adjust the velocity based on the collision, and subtract collisionTime from moveTime
 						CLD_Util::Tools::boxMove(library->getComponent<SDL_Testing::Box>(*i)->box, library->getComponent<SDL_Testing::Physics>(*i)->velocity * collisionTime);
 						moveTime -= collisionTime;
+						//adjust the velocity based on the collision normal
+						if((normal.x > 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.x < 0)||(normal.x < 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.x > 0))
+							library.getComponent<SDL_Testing::Physics>(*i)->velocity.x *= -1;
+						if((normal.y > 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.y < 0)||(normal.y < 0 && library.getComponent<SDL_Testing::Physics>(*i)->velocity.y > 0))
+							library.getComponent<SDL_Testing::Physics>(*i)->velocity.y *= -1;
+
 					}
 
 					//this will repeat over and over until all collisions have been accounted for
