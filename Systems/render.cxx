@@ -8,9 +8,10 @@
 
 #include "render.h"
 #include "../Components/texture.h"
-#include "../Components/position.h"
+#include "../Components/box.h"
 #include "../Components/utility.h"
 #include "../Components/window.h"
+#include "../CLD-Util/Tools/boxTools.h"
 #include <SDL2/SDL.h>
 #include <vector>
 #include <iostream>
@@ -37,7 +38,7 @@ void SDL_Testing::Render::init() {
 	//iterate through all entities in the Library
 	for(std::vector<int>::iterator i = allEntities.begin(); i < allEntities.end(); ++i) {
 		//check to see if entity i has a position, texture and box component
-		if(library->hasComponent<SDL_Testing::Texture>(*i) && library->hasComponent<SDL_Testing::Position>(*i) && library->hasComponent<SDL_Testing::Box>(*i)) {
+		if(library->hasComponent<SDL_Testing::Texture>(*i) && library->hasComponent<SDL_Testing::Box>(*i)) {
 			//if so, add it to entitiesRender
 			entitiesRender.push_back(*i);
 			std::cerr<<"Entity ID "<<*i<<" added to entitiesRender\n";
@@ -63,13 +64,21 @@ void SDL_Testing::Render::update() {
 	}
 	//iterate through all renderable entities
 	for(std::vector<int>::iterator i = entitiesRender.begin(); i < entitiesRender.end(); ++i) {
+		//create a SDL_Rect from the box
+		SDL_Rect* tempRect;
+		CLD_Util::Objects::Box tempBox = library->getComponent<SDL_Testing::Box>(*i)->box;
+		tempRect->x = tempBox.x;
+		tempRect->y = tempBox.y;
+		tempRect->w = tempBox.w;
+		tempRect->h = tempBox.h;
 		//copy the texture to the renderer
-		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, CLD_Util::Tools::boxToSDLRECT(library->getComponent<SDL_Testing::Box>(*i)->box) != 0)) {
+		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, tempRect) != 0) {
 			//something went wrong, ABORT
 			std::cerr<<"SDL_RenderCopy() ERROR: "<<SDL_GetError()<<std::endl;
 			library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 			return;
 		}
+		tempRect = NULL;
 	}
 	//update the screen
 	SDL_RenderPresent(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer);
