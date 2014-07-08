@@ -12,6 +12,9 @@
 #include "../Components/window.h"
 #include "../Components/position.h"
 #include "../Components/texture.h"
+#include "../Components/box.h"
+#include "../Components/physics.h"
+#include "../CLD-Util/Objects/box.h"
 
 #include <SDL2/SDL.h>
 #include <vector>
@@ -55,14 +58,14 @@ void SDL_Testing::Factory::init() {
 		return;
 	}
 	
-	//if creating the window and renderer was successfull, it's time to
-	//create the sprite entity and load it's texture
+	//if creating the window and renderer was successful, it's time to
+	//create the sprite entity 
 	entitySprite = library->createEntity();
-	library->addComponent(entitySprite, new SDL_Testing::Position());
+	//give it a box component to describe it's location and size
+	library->addComponent(entitySprite, new SDL_Testing::Box(CLD_Util::Objects::Box(0, 0, 8, 8)));
+	//give it a physics component
+	library->addComponent(entitySprite, new SDL_Testing::Physics());
 	library->addComponent(entitySprite, new SDL_Testing::Texture());
-	//set the position x & y to 0, 0
-	library->getComponent<SDL_Testing::Position>(entitySprite)->x = 0;
-	library->getComponent<SDL_Testing::Position>(entitySprite)->y = 0;
 	//create a temporary surface to use for creating the Texture
 	SDL_Surface* tempSurf = SDL_LoadBMP("cldECS_logo.bmp");
 	if(tempSurf == NULL) {
