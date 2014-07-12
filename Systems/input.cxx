@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Input::init() {
+	std::cerr<<"...Input Init...\n";
 	//get a vector of all entities in the Library
 	std::vector<int> allEntities = library->allEntityIDs();
 	
@@ -32,6 +33,7 @@ void SDL_Testing::Input::init() {
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Input::update() {
+	std::cerr<<"...Input Update...\n";
 	//variable to hold events
 	SDL_Event event;
 	//start a loop to poll for events
@@ -52,5 +54,6 @@ void SDL_Testing::Input::update() {
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Input::shutdown() {
+	std::cerr<<"...Input Shutdown (does nothing)...\n";
 	//nothing to do
 }
