@@ -20,6 +20,7 @@
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Render::init() {
+	std::cerr<<"...Render Init...\n";
 	//get a vector of all entities in the Library
 	std::vector<int> allEntities = library->allEntityIDs();
 	
@@ -51,6 +52,7 @@ void SDL_Testing::Render::init() {
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Render::update() {
+	std::cerr<<"...Render Update...\n";
 	//just in case something went wrong and we already aborted, return
 	if(library->getComponent<SDL_Testing::Utility>(entityUtility)->programState == SDL_Testing::Utility::states::ABORT)
 		return;
@@ -65,23 +67,24 @@ void SDL_Testing::Render::update() {
 	//iterate through all renderable entities
 	for(std::vector<int>::iterator i = entitiesRender.begin(); i < entitiesRender.end(); ++i) {
 		//create a SDL_Rect from the box
-		SDL_Rect* tempRect;
+		SDL_Rect tempRect;
 		CLD_Util::Objects::Box tempBox = library->getComponent<SDL_Testing::Box>(*i)->box;
-		tempRect->x = tempBox.x;
-		tempRect->y = tempBox.y;
-		tempRect->w = tempBox.w;
-		tempRect->h = tempBox.h;
+		tempRect.x = tempBox.x;
+		tempRect.y = tempBox.y;
+		tempRect.w = tempBox.w;
+		tempRect.h = tempBox.h;
 		//copy the texture to the renderer
-		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, tempRect) != 0) {
+		if(SDL_RenderCopy(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer, library->getComponent<SDL_Testing::Texture>(*i)->sdlTex, NULL, &tempRect) != 0) {
 			//something went wrong, ABORT
 			std::cerr<<"SDL_RenderCopy() ERROR: "<<SDL_GetError()<<std::endl;
 			library->getComponent<SDL_Testing::Utility>(entityUtility)->programState = SDL_Testing::Utility::states::ABORT;
 			return;
 		}
-		tempRect = NULL;
 	}
 	//update the screen
+	std::cerr<<"...Render Updating the Screen...\n";
 	SDL_RenderPresent(library->getComponent<SDL_Testing::Window>(entityWindow)->sdlRenderer);
+	std::cerr<<"...Render Screen Updated...\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -89,5 +92,6 @@ void SDL_Testing::Render::update() {
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Render::shutdown() {
+	std::cerr<<"...Render Shutdown (does nothing)...\n";
 	//doesn't do anything
 }
