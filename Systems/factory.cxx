@@ -25,6 +25,7 @@
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Factory::init() {
+	std::cerr<<"...Factory Init...\n";
 	//find our utility entity created by the World; we'll need it in case an
 	//error occurs or user input is recieved
 	for(std::vector<int>::iterator i = library->allEntityIDs().begin(); i < library->allEntityIDs().end(); ++i) {
@@ -65,6 +66,9 @@ void SDL_Testing::Factory::init() {
 	library->addComponent(entitySprite, new SDL_Testing::Box(CLD_Util::Objects::Box(0, 0, 8, 8)));
 	//give it a physics component
 	library->addComponent(entitySprite, new SDL_Testing::Physics());
+	//give it a push
+	library->getComponent<SDL_Testing::Physics>(entitySprite)->velocity = CLD_Util::Objects::vec2d(0.1, 0.1);
+	library->getComponent<SDL_Testing::Physics>(entitySprite)->type = SDL_Testing::Physics::Type::BALL;
 	library->addComponent(entitySprite, new SDL_Testing::Texture());
 	//create a temporary surface to use for creating the Texture
 	SDL_Surface* tempSurf = SDL_LoadBMP("cldECS_logo.bmp");
@@ -93,6 +97,7 @@ void SDL_Testing::Factory::init() {
 //-----------------------------------------------------------------------------
 
 void SDL_Testing::Factory::update() {
+	std::cerr<<"...Factory Update (does nothing)...\n";
 	//don't do anything
 }
 
@@ -102,6 +107,7 @@ void SDL_Testing::Factory::update() {
 
 
 void SDL_Testing::Factory::shutdown() {
+	std::cerr<<"...Factory Shutdown...\n";
 	//destroy the sprite
 	SDL_DestroyTexture(library->getComponent<SDL_Testing::Texture>(entitySprite)->sdlTex);
 	library->destroyEntity(entitySprite);
