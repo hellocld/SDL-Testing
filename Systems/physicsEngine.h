@@ -21,6 +21,8 @@ namespace SDL_Testing {
 
 			int entityUtility;
 			std::vector<int> entitiesPhysics;
+			unsigned int currentTime = 0;
+			unsigned int oldTime = 0;
 	};
 }
 
