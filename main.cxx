@@ -9,6 +9,7 @@
 #include "Components/utility.h"
 #include "Systems/factory.h"
 #include "Systems/input.h"
+#include "Systems/physicsEngine.h"
 #include "Systems/render.h"
 #include <SDL2/SDL.h>
 
@@ -32,6 +33,7 @@ int main (int argc, char* argv[]) {
 	//add the factory and render systems
 	sdltest.addSystem(new SDL_Testing::Factory());
 	sdltest.addSystem(new SDL_Testing::Input());
+	sdltest.addSystem(new SDL_Testing::PhysicsEngine());
 	sdltest.addSystem(new SDL_Testing::Render());
 
 	//initialize the systems
