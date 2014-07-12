@@ -13,7 +13,10 @@
 namespace SDL_Testing {
 	class Box : public CLD_ECS::Component {
 		public:
+			Box (CLD_Util::Objects::Box b) :
+				box(b) {}
 			CLD_Util::Objects::Box box;
+
 	};
 }
 
